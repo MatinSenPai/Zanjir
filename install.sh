@@ -52,8 +52,9 @@ get_user_input() {
     # Detect IP mode
     if is_ip_address "$SERVER_ADDRESS"; then
         IP_MODE=true
-        PROTOCOL="http"
-        log_warning "IP mode detected. Running without SSL."
+        PROTOCOL="https"
+        log_warning "IP mode detected. Self-signed SSL will be used."
+        log_warning "Browser will show security warning - click Advanced > Proceed."
     else
         IP_MODE=false
         PROTOCOL="https"
@@ -145,12 +146,12 @@ setup_caddyfile() {
 update_element_config() {
     log_info "Configuring Element..."
     
-    if [ "$IP_MODE" = true ]; then
-        sed -i "s|https://\${DOMAIN}|http://${SERVER_ADDRESS}|g" config/element-config.json
-        sed -i "s|\${DOMAIN}|${SERVER_ADDRESS}|g" config/element-config.json
-    else
-        sed -i "s|\${DOMAIN}|${SERVER_ADDRESS}|g" config/element-config.json
-    fi
+    # Replace domain placeholder
+    sed -i "s|\${DOMAIN}|${SERVER_ADDRESS}|g" config/element-config.json
+    
+    # Always use https (self-signed for IP, Let's Encrypt for domain)
+    sed -i "s|http://${SERVER_ADDRESS}|https://${SERVER_ADDRESS}|g" config/element-config.json
+    
     log_success "Element configured."
 }
 
@@ -163,9 +164,9 @@ update_dendrite_config() {
     sed -i "s/\${POSTGRES_DB}/dendrite/g" dendrite/dendrite.yaml
     sed -i "s/\${REGISTRATION_SHARED_SECRET}/${REGISTRATION_SECRET}/g" dendrite/dendrite.yaml
     
+    # IP mode uses port 443 with self-signed SSL
     if [ "$IP_MODE" = true ]; then
-        sed -i "s|:443|:80|g" dendrite/dendrite.yaml
-        sed -i "s|https://|http://|g" dendrite/dendrite.yaml
+        sed -i "s|:443|:443|g" dendrite/dendrite.yaml
     fi
     log_success "Dendrite configured."
 }
@@ -231,7 +232,8 @@ print_success() {
     
     if [ "$IP_MODE" = true ]; then
         echo ""
-        echo -e "${YELLOW}Warning: Running without SSL (HTTP only). For testing only.${NC}"
+        echo -e "${YELLOW}Warning: Using self-signed SSL certificate.${NC}"
+        echo -e "${YELLOW}Browser will show security warning - click Advanced > Proceed.${NC}"
     fi
     
     echo ""
