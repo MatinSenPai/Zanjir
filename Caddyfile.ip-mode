@@ -1,18 +1,15 @@
 # Zanjir - Caddy Configuration for IP-only mode
-# Self-signed HTTPS for IP addresses
+# Using Element's own nginx instead of serving files directly
 
 {
-    # Disable automatic HTTPS to have more control
     auto_https off
 }
 
 :443 {
-    # Generate self-signed cert for the IP and localhost
     tls internal {
         on_demand
     }
 
-    # Encode responses
     encode gzip zstd
 
     # Matrix .well-known endpoints
@@ -24,27 +21,23 @@
     handle /.well-known/matrix/client {
         header Content-Type application/json
         header Access-Control-Allow-Origin *
-        respond `{"m.homeserver": {"base_url": "https://{$SERVER_ADDRESS}"}, "m.identity_server": {"base_url": "https://vector.im"}}`
+        respond `{"m.homeserver": {"base_url": "https://{$SERVER_ADDRESS}"}}`
     }
 
-    # Matrix Client-Server API
+    # Matrix API
     handle /_matrix/* {
         reverse_proxy dendrite:8008
     }
 
-    # Matrix Federation API  
     handle /_dendrite/* {
         reverse_proxy dendrite:8008
     }
 
-    # Element Web (default)
+    # Element Web - proxy to element container's nginx
     handle {
-        root * /srv/element
-        file_server
-        try_files {path} /index.html
+        reverse_proxy element:8080
     }
 
-    # Security headers
     header {
         X-Frame-Options SAMEORIGIN
         X-Content-Type-Options nosniff
@@ -58,7 +51,6 @@
     }
 }
 
-# HTTP redirect
 :80 {
     redir https://{host}{uri} permanent
 }
