@@ -50,17 +50,17 @@
         "MessageComposerInput.showPollsButton": false
     },
     "branding": {
-        "welcome_background_url": "",
-        "auth_header_logo_url": "",
+        "welcome_background_url": null,
+        "auth_header_logo_url": "logo.webp",
         "auth_footer_links": [
             {
-                "text": "ساخته شده در ایران",
+                "text": "GitHub - Matin SenPai",
                 "url": "https://github.com/MatinSenPai/zanjir"
             }
         ]
     },
     "embedded_pages": {
-        "welcome_url": "welcome.html"
+        "welcome_url": "/welcome.html"
     },
     "map_style_url": "",
     "permalink_prefix": "https://${DOMAIN}",
