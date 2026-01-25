@@ -1,353 +1,394 @@
-<div dir="rtl" align="right">
+# زنجیر⛓️ - Zanjir Matrix Server
 
-# زنجیر - پیام‌رسان امن و خصوصی بر پایه Matrix
+**Self-hosted, secure, decentralized messaging server powered by Matrix protocol**
 
-<div align="center">
-
-![زنجیر](https://img.shields.io/badge/زنجیر-v1.0.0-blue?style=for-the-badge)
-![Matrix](https://img.shields.io/badge/Matrix-Protocol-green?style=for-the-badge)
-![License](https://img.shields.io/badge/License-Apache%202.0-orange?style=for-the-badge)
-
-**سرور پیام‌رسان شخصی، مخصوص VPS های ایران**
-
-</div>
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Docker](https://img.shields.io/badge/docker-ready-blue.svg)](https://www.docker.com/)
+[![Matrix](https://img.shields.io/badge/matrix-dendrite-green.svg)](https://matrix.org/)
 
 ---
+
 [![zanjir-screens-copy.webp](https://i.postimg.cc/yYjVzZzN/zanjir-screens-copy.webp)](https://postimg.cc/9r43dz03)
-## آموزش ویدئویی
 
-[![معرفی پروژه زنجیر](https://i.postimg.cc/0Qq8qTFm/zanjir-copy.webp)](https://youtu.be/ZKTOs9y6rpw)
+## Video Tutorial
 
+[![Zanjir Project Introduction](https://i.postimg.cc/0Qq8qTFm/zanjir-copy.webp)](https://youtu.be/ZKTOs9y6rpw)
 
-## معرفی
+**📖 [Persian Version (نسخه فارسی)](README-FA.md)**
 
-زنجیر یک بسته‌بندی آماده از پروتکل Matrix هست که برای شرایط ایران بهینه شده. هدف اینه که بتونی روی یه VPS اوبونتوی ایرانی، سرور پیام‌رسان شخصی خودت رو زیر ۵ دقیقه بالا بیاری.
+---
+## 📋 Table of Contents
 
-این پروژه از Dendrite (نسخه سبک Matrix) استفاده میکنه که برای سرورهای کم‌منابع مناسبه.
-
-### چی داره؟
-
-- **کاملا فارسی** - رابط کاربری ۱۰۰٪ فارسی و راست‌چین
-- **رمزنگاری سرتاسری** - پیام‌ها E2E رمزنگاری میشن
-- **مستقل** - Federation غیرفعاله، به سرور خارجی وصل نمیشه
-- **سبک** - روی VPSهای ارزون ایرانی هم خوب کار میکنه
-- **نصب ساده** - اسکریپت اینتراکتیو، فقط سوالات رو جواب بده
-- **بدون وابستگی خارجی** - نیازی به سرویس‌های matrix.org نداره
-
-### برای کی مناسبه؟
-
-- تیم‌ها و شرکت‌هایی که پیام‌رسان داخلی میخوان
-- گروه‌های دوستانه که چت امن میخوان
-- هر کسی که میخواد دیتاش پیش خودش باشه
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [Installation](#installation)
+- [User Guide](#user-guide)
+- [Admin Panel](#admin-panel)
+- [Voice/Video Calls](#voicevideo-calls)
+- [Custom Port](#custom-port)
+- [Troubleshooting](#troubleshooting)
+- [FAQ](#faq)
+- [Contributing](#contributing)
+- [License](#license)
 
 ---
 
-## پیش‌نیازها
+## ✨ Features
 
-### سخت‌افزار
-
-| منبع | حداقل | پیشنهادی |
-|------|-------|----------|
-| CPU | 1 هسته | 2 هسته |
-| RAM | 1 گیگابایت | 2 گیگابایت |
-| دیسک | 10 گیگابایت | 20 گیگابایت |
-
-### نرم‌افزار
-
-- سیستم عامل: Ubuntu 22.04 یا 24.04
-- یک دامنه با A Record به IP سرور (یا فقط IP برای تست)
-- دسترسی root به سرور
-
-### درباره دامنه
-
-میتونی از هر دامنه‌ای استفاده کنی. اگه دامنه نداری، با IP خالی هم کار میکنه ولی SSL نخواهی داشت.
+| Feature | Description |
+|---------|-------------|
+| 🔐 **Open Registration** | Users can self-register via web interface |
+| 👑 **Admin Panel** | Web-based admin dashboard with audit logging |
+| 📞 **Voice/Video Calls** | TURN server for reliable NAT traversal |
+| 🔧 **Custom Ports** | Configurable HTTPS/HTTP ports (no 443 conflict) |
+| 📱 **Element Web** | Modern, responsive Matrix client |
+| 🇮🇷 **Persian UI** | Fully translated interface |
+| 🐳 **Docker Powered** | One-command installation |
+| 🔒 **Auto HTTPS** | Let's Encrypt or self-signed certificates |
 
 ---
 
-## نصب
+## 🚀 Quick Start
 
-وارد سرور شو و این دستورات رو بزن:
+**Requirements:**
+- Ubuntu 20.04+ or Debian 11+
+- 2GB RAM minimum
+- Domain name (or IP address)
+- Ports: 80, 443 (or custom), 3478, 5349 (UDP)
+
+**One-line installation:**
+
+```bash
+git clone https://github.com/MatinSenPai/zanjir.git ~/zanjir
+cd ~/zanjir
+sudo bash install.sh
+```
+
+**Access:**
+- **Web App**: `https://your-domain.com`
+- **Admin Panel**: `https://your-domain.com/admin`
+
+---
+
+## 📦 Installation
+
+### Step 1: Clone Repository
 
 ```bash
 git clone https://github.com/MatinSenPai/zanjir.git
 cd zanjir
+```
+
+### Step 2: Run Installer
+
+```bash
 sudo bash install.sh
 ```
 
-اسکریپت ازت میپرسه:
-1. آدرس سرور (دامنه یا IP)
-2. ایمیل (فقط برای SSL، اگه IP زدی لازم نیست)
+**Installation prompts:**
 
-بقیه کارا اتوماتیک انجام میشه.
+1. **Server address** - Your domain or IP (e.g., `matrix.example.com` or `185.123.45.67`)
+2. **Admin email** - For SSL certificates (domain mode only)
+3. **HTTPS port** - Default: 443 (press Enter), or custom (e.g., 8443)
 
----
+### Step 3: Create Admin User
 
-## ساخت کاربر
-
-ثبت‌نام باز نیست (که سرور اسپم نشه). یوزر رو دستی میسازی:
+After installation completes:
 
 ```bash
 docker exec -it zanjir-dendrite /usr/bin/create-account \
     --config /etc/dendrite/dendrite.yaml \
-    --username نام_کاربری \
+    --username YOUR_USERNAME \
     --admin
 ```
 
-پسورد رو وارد کن و تمام.
-
----
-
-## استفاده
-
-### وب
-
-مرورگر رو باز کن، آدرس سرور رو بزن. لاگین کن.
-
-### موبایل (Element)
-
-1. اپ Element رو از کافه‌بازار یا مایکت بگیر (یا APK دانلود کن)
-2. گزینه ورود رو بزن
-3. حتما آدرس سرور رو Edit کن و آدرس خودت رو بذار
-4. لاگین کن
-
-### ساخت گروه
-
-دکمه + رو بزن، اتاق جدید، اسم بذار و تنظیمات پرایوسی رو انتخاب کن.
-
----
-
-## دستورات مفید
+**Example:**
 
 ```bash
-# وضعیت سرویس‌ها
-docker compose ps
-
-# لاگ‌ها
-docker compose logs -f
-
-# ریستارت
-docker compose restart
-
-# خاموش کردن
-docker compose down
-
-# آپدیت
-docker compose pull
-docker compose up -d
+docker exec -it zanjir-dendrite /usr/bin/create-account \
+    --config /etc/dendrite/dendrite.yaml \
+    --username admin \
+    --admin
 ```
+
+You'll be prompted to set a password.
 
 ---
 
-## مشکلات رایج
+## 👤 User Guide
 
-### خطای 403 موقع نصب Docker
+### Registration
 
-اگه این خطا رو دیدی:
-```
-curl: (22) The requested URL returned error: 403
-https://download.docker.com/...
-```
+1. Visit `https://your-domain.com`
+2. Click **"Create account"**
+3. Fill in username and password
+4. Start messaging!
 
-**دلیل:** سرور نمیتونه به `download.docker.com` وصل بشه (تحریم یا بلاک)
+### Using Element Web
 
-**راه‌حل:** Docker رو از ریپوی اوبونتو نصب کن (تحریم‌خور نیست):
+- **Create Room**: Click `+` button → New Room
+- **Invite Users**: Room settings → Invite users → Enter `@username:your-domain.com`
+- **Send Messages**: Type and press Enter
+- **Voice Call**: Click phone icon in room header
+- **Video Call**: Click video icon in room header
+
+### Mobile Apps
+
+**Android:**
+- [Element (Play Store)](https://play.google.com/store/apps/details?id=im.vector.app)
+- [Element (F-Droid)](https://f-droid.org/packages/im.vector.app/)
+
+**iOS:**
+- [Element (App Store)](https://apps.apple.com/app/element-messenger/id1083446067)
+
+**Configuration:**
+- Homeserver URL: `https://your-domain.com`
+- Identity server: Leave blank
+
+---
+
+## 🛡️ Admin Panel
+
+### Access
+
+Visit: `https://your-domain.com/admin`
+
+Login with your admin account credentials.
+
+### Features
+
+#### Dashboard
+- Total users count
+- Active users
+- Total rooms
+
+#### User Management
+- View all users
+- Disable user accounts
+- Delete users
+- View user status
+
+#### Audit Logs
+- Track all admin actions
+- Timestamps and IP addresses
+- Target user tracking
+- Detailed action logs
+
+### Admin Actions
+
+**Disable a user:**
+1. Go to `Users` page
+2. Find user
+3. Click **"Disable"**
+
+**Delete a user:**
+1. Go to `Users` page
+2. Find user
+3. Click **"Delete"** → Confirm
+
+All actions are automatically logged and visible in the **Logs** page.
+
+---
+
+## 📞 Voice/Video Calls
+
+Zanjir includes a TURN server (coturn) for reliable voice/video calls.
+
+### How It Works
+
+TURN server helps users behind NAT/firewalls connect:
+- Direct P2P when possible
+- TURN relay when necessary
+- Automatic fallback
+
+### Firewall Configuration
+
+**Required ports:**
+
+| Port | Protocol | Purpose |
+|------|----------|---------|
+| 3478 | UDP | STUN/TURN |
+| 5349 | UDP | TURN-TLS |
+
+**UFW example:**
 
 ```bash
-sudo apt update
-sudo apt install -y docker.io docker-compose-plugin
-sudo systemctl enable docker
-sudo systemctl start docker
+sudo ufw allow 3478/udp
+sudo ufw allow 5349/udp
 ```
 
-بعد اسکریپت نصب رو دوباره اجرا کن.
+### Testing Calls
+
+1. Create two accounts
+2. Create a room, invite both users
+3. Click phone/video icon
+4. Accept call on other end
 
 ---
 
-### مشکل Docker Compose (نسخه قدیمی)
+## 🔧 Custom Port
 
-اگه این خطا رو دیدی:
+If port 443 is already in use, you can use a custom port.
+
+### Installation with Custom Port
+
+During `install.sh`, enter your desired port:
+
 ```
-docker-compose: command not found
+HTTPS port (default: 443): 8443
 ```
 
-یا:
+This will:
+- Use port 8443 for HTTPS
+- Use port 8080 for HTTP (auto-calculated)
+- Update all configurations
+
+### Accessing with Custom Port
+
 ```
-docker compose version
-# Docker Compose version v1.x.x (قدیمی)
+https://your-domain.com:8443
 ```
 
-**راه‌حل:** نسخه جدید (v2) رو نصب کن:
+### Changing Port After Installation
 
+1. Edit `.env`:
+   ```bash
+   nano .env
+   ```
+2. Change `HTTPS_PORT` and `HTTP_PORT`
+3. Restart services:
+   ```bash
+   docker compose down
+   docker compose up -d
+   ```
+
+---
+
+## 🔍 Troubleshooting
+
+### Common Issues
+
+#### Docker Installation fails (Iranian VPS)
+
+**Error:** `connection refused` to `download.docker.com`
+
+**Solution:** Script automatically uses Iranian mirrors:
+- `docker.arvancloud.ir`
+- `registry.docker.ir`
+
+#### Registration not working
+
+**Check:**
+1. Verify `dendrite.yaml`: `registration_disabled: false`
+2. Check `element-config.json`: `"UIFeature.registration": true`
+3. Restart containers:
+   ```bash
+   docker compose restart
+   ```
+
+#### Voice calls failing
+
+**Solutions:**
+1. Check TURN server is running:
+   ```bash
+   docker ps | grep coturn
+   ```
+2. Verify firewall allows UDP 3478, 5349
+3. Check TURN secret in `.env` matches `dendrite.yaml`
+
+#### Admin panel login fails
+
+**Solutions:**
+1. Verify user is admin:
+   ```bash
+   docker exec -it zanjir-dendrite /usr/bin/create-account \
+       --config /etc/dendrite/dendrite.yaml \
+       --username YOUR_USERNAME \
+       --admin
+   ```
+2. Check admin container logs:
+   ```bash
+   docker logs zanjir-admin
+   ```
+
+#### Port already in use
+
+**Solution:** Use custom port during installation, or change port in `.env`
+
+---
+
+## ❓ FAQ
+
+### General
+
+**Q: Can I use an IP address instead of domain?**  
+A: Yes! The installer detects IP mode and uses self-signed certificates.
+
+**Q: Is federation enabled?**  
+A: No, Zanjir is designed for isolated single-server deployment.
+
+**Q: Can users video call externally?**  
+A: Only within your Zanjir server (federation disabled).
+
+### Security
+
+**Q: How are passwords stored?**  
+A: Bcrypt hashed in PostgreSQL.
+
+**Q: Is end-to-end encryption supported?**  
+A: Yes! Element/Matrix supports E2EE by default.
+
+**Q: What about audit logs?**  
+A: Admin actions logged in SQLite (`admin/audit_log.db`).
+
+### Performance
+
+**Q: How many users can it handle?**  
+A: Dendrite is lightweight. A 2GB VPS can handle ~100-500 users.
+
+**Q: What about backups?**  
+A: Backup Docker volumes:
 ```bash
-# حذف نسخه قدیمی (اگه هست)
-sudo apt remove docker-compose -y
-sudo rm -f /usr/local/bin/docker-compose
-
-# نصب نسخه جدید
-sudo apt update
-sudo apt install docker-compose-plugin -y
-```
-
-تست:
-
-```bash
-docker compose version
-# باید نشون بده: Docker Compose version v2.x.x
-```
-
-**نکته:** دستور جدید `docker compose` هست (با فاصله)، نه `docker-compose` (با خط تیره).
-
----
-
-### کندی Pull کردن ایمیج‌ها
-
-اگه دانلود ایمیج‌های Docker کنده:
-
-**۱. تنظیم Docker Mirror ایرانی:**
-
-```bash
-sudo nano /etc/docker/daemon.json
-```
-
-این محتوا رو بذار:
-
-```json
-{
-  "registry-mirrors": [
-    "https://docker.arvancloud.ir"
-  ]
-}
-```
-
-بعد:
-
-```bash
-sudo systemctl restart docker
+docker run --rm \
+  -v zanjir-postgres-data:/data \
+  -v $(pwd):/backup \
+  ubuntu tar czf /backup/postgres-backup.tar.gz /data
 ```
 
 ---
 
-### مشکل DNS
+## 🤝 Contributing
 
-اگه به اینترنت وصل نمیشی:
-
-```bash
-sudo nano /etc/resolv.conf
-```
-
-این رو بذار:
-
-```
-nameserver 8.8.8.8
-nameserver 1.1.1.1
-```
-
-بعد:
-
-```bash
-sudo systemctl restart systemd-resolved
-ping google.com
-```
+Contributions welcome! Please:
+1. Fork the repository
+2. Create feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open Pull Request
 
 ---
 
-### SSL نگرفت
+## 📄 License
 
-دامنه رو چک کن. `dig +short yourdomain.com` باید IP سرور رو بده. اگه تازه ست کردی صبر کن.
-
-### صفحه باز نمیشه
-
-فایروال رو چک کن:
-
-```bash
-sudo ufw allow 80
-sudo ufw allow 443
-```
-
-### لاگین نمیشه
-
-یوزر نساختی. بخش ساخت کاربر رو بخون.
-
-### کندی یا قطعی
-
-- مطمئن شو سرور ایرانیه و فیلتر نیست
-- اینترنت سرور رو چک کن
+MIT License - see [LICENSE](LICENSE) file
 
 ---
 
-## ساختار پروژه
+## 🙏 Acknowledgments
 
-```
-zanjir/
-├── install.sh              # اسکریپت نصب
-├── docker-compose.yml      # داکر
-├── Caddyfile               # وب‌سرور (دامنه)
-├── Caddyfile.ip-mode       # وب‌سرور (IP)
-├── config/
-│   ├── element-config.json # کانفیگ کلاینت
-│   └── welcome.html        # صفحه اول
-├── dendrite/
-│   └── dendrite.yaml       # کانفیگ سرور
-└── scripts/
-    └── generate-keys.sh    # تولید کلید
-```
+- [Matrix.org](https://matrix.org/) - Open protocol
+- [Dendrite](https://github.com/matrix-org/dendrite) - Lightweight homeserver
+- [Element](https://element.io/) - Web client
+- [Coturn](https://github.com/coturn/coturn) - TURN server
+- [Caddy](https://caddyserver.com/) - Reverse proxy
 
 ---
 
-## امنیت
+## 📞 Support
 
-- پسورد قوی بذار
-- فایل `.env` رو جایی آپلود نکن
-- سرور رو آپدیت نگه دار
-
-### بکاپ
-
-```bash
-# دیتابیس
-docker exec zanjir-postgres pg_dump -U dendrite dendrite > backup.sql
-
-# فایل‌ها
-tar -czvf zanjir-backup.tar.gz dendrite/ config/ .env
-```
+- **GitHub Issues**: [Report bugs](https://github.com/MatinSenPai/zanjir/issues)
+- **Discussions**: [Ask questions](https://github.com/MatinSenPai/zanjir/discussions)
 
 ---
 
-## نکات فنی
-
-- **Federation غیرفعاله** - این سرور به سرورهای Matrix دیگه وصل نمیشه. دلیلش اینه که سرورهای matrix.org از ایران فیلتر هستن.
-- **Identity Server نداره** - سرویس‌های تایید ایمیل و شماره تلفن matrix.org هم فیلتر هستن، پس غیرفعال شدن.
-- **کاملا مستقل** - همه چیز روی سرور خودت اجرا میشه.
-
-اگه بعدا خواستی Federation رو فعال کنی (مثلا سرور رو به خارج بردی)، توی `dendrite/dendrite.yaml` این خط رو عوض کن:
-
-```yaml
-global:
-  disable_federation: false
-```
-
----
-
-## لایسنس
-
-Apache 2.0
-
----
-
-## کردیت
-
-- [Matrix.org](https://matrix.org)
-- [Dendrite](https://github.com/matrix-org/dendrite)
-- [Element](https://element.io)
-- [Caddy](https://caddyserver.com)
-
----
-
-مشکلی دیدی توی Issues بگو.
-
-<div align="center">
-
-**تقدیم به بچه‌های خوب ایران**
-
-</div>
-
-</div>
+**Made with ❤️ for secure, private communication**

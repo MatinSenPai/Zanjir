@@ -72,6 +72,22 @@ services:
       - "--no-dtls"
     networks:
       - zanjir-network
+  # Admin Panel
+  admin:
+    build: ./admin
+    container_name: zanjir-admin
+    restart: unless-stopped
+    environment:
+      DENDRITE_URL: http://dendrite:8008
+      REGISTRATION_SHARED_SECRET: ${REGISTRATION_SHARED_SECRET}
+      DOMAIN: ${DOMAIN}
+    volumes:
+      - ./admin:/app
+      - admin-data:/app/data
+    networks:
+      - zanjir-network
+    depends_on:
+      - dendrite
 
   # Element Web Client
   element:
@@ -90,11 +106,13 @@ services:
     container_name: zanjir-caddy
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
+      - "${HTTP_PORT:-80}:${HTTP_PORT:-80}"
+      - "${HTTPS_PORT:-443}:${HTTPS_PORT:-443}"
     environment:
       DOMAIN: ${DOMAIN}
       SERVER_ADDRESS: ${SERVER_ADDRESS:-${DOMAIN}}
+      HTTPS_PORT: ${HTTPS_PORT:-443}
+      HTTP_PORT: ${HTTP_PORT:-80}
     volumes:
       - ./Caddyfile.active:/etc/caddy/Caddyfile:ro
       - caddy-data:/data
@@ -150,3 +168,6 @@ volumes:
     name: zanjir-caddy-config
   element-web:
     name: zanjir-element-web
+  admin-data:
+    name: zanjir-admin-data
+

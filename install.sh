@@ -247,10 +247,31 @@ get_user_input() {
         ADMIN_EMAIL=""
     fi
     
+    # Get custom port (optional)
+    while true; do
+        read -p "HTTPS port (default: 443): " HTTPS_PORT
+        if [ -z "$HTTPS_PORT" ]; then
+            HTTPS_PORT=443
+            break
+        elif [[ "$HTTPS_PORT" =~ ^[0-9]+$ ]] && [ "$HTTPS_PORT" -ge 1 ] && [ "$HTTPS_PORT" -le 65535 ]; then
+            break
+        else
+            log_error "Invalid port! Must be between 1-65535"
+        fi
+    done
+    
+    # Calculate HTTP port (HTTPS_PORT - 363, but ensure it's valid)
+    HTTP_PORT=$((HTTPS_PORT - 363))
+    if [ "$HTTP_PORT" -lt 1 ]; then
+        HTTP_PORT=80
+    fi
+    
     echo ""
     log_info "Settings:"
     echo "   Address: ${SERVER_ADDRESS}"
     echo "   Protocol: ${PROTOCOL}"
+    echo "   HTTPS Port: ${HTTPS_PORT}"
+    echo "   HTTP Port: ${HTTP_PORT}"
     if [ "$IP_MODE" = false ]; then
         echo "   Email: ${ADMIN_EMAIL}"
     fi
@@ -332,7 +353,10 @@ DOMAIN=${SERVER_ADDRESS}
 SERVER_ADDRESS=${SERVER_ADDRESS}
 PROTOCOL=${PROTOCOL}
 IP_MODE=${IP_MODE}
+HTTPS_PORT=${HTTPS_PORT}
+HTTP_PORT=${HTTP_PORT}
 REGISTRATION_SHARED_SECRET=${REGISTRATION_SECRET}
+TURN_SECRET=${TURN_SECRET}
 POSTGRES_USER=dendrite
 POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 POSTGRES_DB=dendrite

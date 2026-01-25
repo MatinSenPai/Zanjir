@@ -1,14 +1,14 @@
 # Zanjir - Caddy Reverse Proxy Configuration (Domain Mode)
 # Automatic HTTPS with Let's Encrypt
 
-{$DOMAIN} {
+:{$HTTPS_PORT:-443} {
     # Encode responses
     encode gzip zstd
 
     # Matrix .well-known endpoints
     handle /.well-known/matrix/server {
         header Content-Type application/json
-        respond `{"m.server": "{$DOMAIN}:443"}`
+        respond `{"m.server": "{$DOMAIN}:{$HTTPS_PORT:-443}"}`
     }
 
     handle /.well-known/matrix/client {
@@ -25,6 +25,11 @@
     # Matrix Federation API
     handle /_dendrite/* {
         reverse_proxy dendrite:8008
+    }
+
+    # Admin Panel
+    handle /admin/* {
+        reverse_proxy admin:5000
     }
 
     # Mobile guide - serve our custom page directly
@@ -72,4 +77,9 @@
         output stdout
         format console
     }
+}
+
+# Redirect HTTP to HTTPS
+:{$HTTP_PORT:-80} {
+    redir https://{host}:{$HTTPS_PORT:-443}{uri} permanent
 }
