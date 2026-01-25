@@ -53,7 +53,7 @@ global:
     enabled: false
 
 client_api:
-  registration_disabled: true
+  registration_disabled: false
   guests_disabled: true
   registration_shared_secret: "${REGISTRATION_SHARED_SECRET}"
   

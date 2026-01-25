@@ -34,7 +34,7 @@
         "UIFeature.flair": false,
         "UIFeature.communities": false,
         "UIFeature.advancedSettings": false,
-        "UIFeature.registration": false,
+        "UIFeature.registration": true,
         "UIFeature.passwordReset": true,
         "UIFeature.deactivate": false,
         "UIFeature.advancedEncryption": true,
