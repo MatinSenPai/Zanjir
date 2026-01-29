@@ -502,8 +502,27 @@ print_success() {
     echo ""
     echo "Registration secret (for API): ${REGISTRATION_SECRET}"
     echo ""
-    echo "All settings saved in .env file."
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo -e "${CYAN}💡 Tip: Run 'zanjir' anytime to manage your server${NC}"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo ""
+}
+
+# Install CLI tool
+install_cli_tool() {
+    log_info "Installing Zanjir CLI tool..."
+    
+    # Install figlet if not present (optional, graceful fallback)
+    if ! command -v figlet &> /dev/null; then
+        log_info "Installing figlet for banner..."
+        apt-get install -y figlet 2>/dev/null || log_warning "figlet not installed (optional)"
+    fi
+    
+    # Copy CLI script to /usr/local/bin
+    cp zanjir-cli.sh /usr/local/bin/zanjir
+    chmod +x /usr/local/bin/zanjir
+    
+    log_success "CLI tool installed. Run 'zanjir' to manage your server."
 }
 
 # Main
@@ -520,4 +539,5 @@ setup_caddyfile
 update_element_config
 start_services
 check_services
+install_cli_tool
 print_success

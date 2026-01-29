@@ -120,6 +120,58 @@ You'll be prompted to set a password.
 
 ---
 
+## 🎛️ Management
+
+After installation, use the `zanjir` command to manage your server:
+
+```bash
+zanjir
+```
+
+### Available Commands
+
+```bash
+zanjir              # Interactive menu
+zanjir status       # Show service status
+zanjir logs         # View logs (all services)
+zanjir logs conduit # View specific service logs
+zanjir restart      # Restart all services
+zanjir start        # Start all services
+zanjir stop         # Stop all services
+zanjir update       # Update to latest version
+zanjir backup       # Backup all data
+zanjir uninstall    # Completely remove Zanjir
+```
+
+### Interactive Menu
+
+When you run `zanjir` without arguments, you'll see a beautiful interactive menu:
+
+```
+╔═══════════════════════════╗
+║                           ║
+║      Z A N J I R ⛓️       ║
+║                           ║
+╚═══════════════════════════╝
+
+Matrix Server Management Tool
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Main Menu:
+
+  1. Show Status
+  2. View Logs
+  3. Restart Services
+  4. Start Services
+  5. Stop Services
+  6. Update Zanjir
+  7. Backup Data
+  8. Uninstall
+  9. Exit
+```
+
+---
+
 ## 👤 User Guide
 
 ### Registration
